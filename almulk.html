@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<title>Game Tebak Ayat Surah Al-Mulk</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#3a7bd5,#3a6073);
+text-align:center;
+padding:40px;
+color:white;
+}
+
+.container{
+background:white;
+color:black;
+max-width:700px;
+margin:auto;
+padding:30px;
+border-radius:10px;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+border:none;
+background:#3498db;
+color:white;
+border-radius:6px;
+cursor:pointer;
+}
+
+button:hover{
+background:#2980b9;
+}
+
+.option{
+display:block;
+margin:8px;
+padding:10px;
+background:#eee;
+border-radius:6px;
+cursor:pointer;
+}
+
+.option:hover{
+background:#ddd;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🎮 Game Tebak Ayat Surah Al-Mulk</h1>
+
+<div id="login">
+
+<h3>Pilih Nama Murid</h3>
+
+<select id="nama">
+<option>Ahmad</option>
+<option>Aisyah</option>
+<option>Fatimah</option>
+<option>Ali</option>
+<option>Zaid</option>
+</select>
+
+<br><br>
+
+<button onclick="startGame()">Mulai Game</button>
+
+</div>
+
+<div id="game" style="display:none">
+
+<h3 id="murid"></h3>
+
+<button onclick="playAudio()">🔊 Dengarkan Ayat</button>
+
+<h3>Pilih Ayat Ke Berapa?</h3>
+
+<div id="options"></div>
+
+<button onclick="nextQuestion()">Soal Baru</button>
+
+<h2 id="score">Skor: 0</h2>
+
+</div>
+
+</div>
+
+<script>
+
+let student="";
+let score=0;
+let currentVerse;
+
+const verses=[
+{num:1,audio:"https://everyayah.com/data/Alafasy_128kbps/067001.mp3"},
+{num:2,audio:"https://everyayah.com/data/Alafasy_128kbps/067002.mp3"},
+{num:3,audio:"https://everyayah.com/data/Alafasy_128kbps/067003.mp3"},
+{num:4,audio:"https://everyayah.com/data/Alafasy_128kbps/067004.mp3"},
+{num:5,audio:"https://everyayah.com/data/Alafasy_128kbps/067005.mp3"},
+{num:6,audio:"https://everyayah.com/data/Alafasy_128kbps/067006.mp3"},
+{num:7,audio:"https://everyayah.com/data/Alafasy_128kbps/067007.mp3"},
+{num:8,audio:"https://everyayah.com/data/Alafasy_128kbps/067008.mp3"},
+{num:9,audio:"https://everyayah.com/data/Alafasy_128kbps/067009.mp3"},
+{num:10,audio:"https://everyayah.com/data/Alafasy_128kbps/067010.mp3"},
+{num:11,audio:"https://everyayah.com/data/Alafasy_128kbps/067011.mp3"},
+{num:12,audio:"https://everyayah.com/data/Alafasy_128kbps/067012.mp3"},
+{num:13,audio:"https://everyayah.com/data/Alafasy_128kbps/067013.mp3"},
+{num:14,audio:"https://everyayah.com/data/Alafasy_128kbps/067014.mp3"},
+{num:15,audio:"https://everyayah.com/data/Alafasy_128kbps/067015.mp3"}
+];
+
+function startGame(){
+
+student=document.getElementById("nama").value;
+
+document.getElementById("login").style.display="none";
+document.getElementById("game").style.display="block";
+
+document.getElementById("murid").innerHTML="Murid: "+student;
+
+nextQuestion();
+
+}
+
+function randomOptions(correct){
+
+let options=[correct];
+
+while(options.length<4){
+
+let rand=Math.floor(Math.random()*15)+1;
+
+if(!options.includes(rand)) options.push(rand);
+
+}
+
+options.sort(()=>Math.random()-0.5);
+
+return options;
+
+}
+
+function nextQuestion(){
+
+currentVerse=verses[Math.floor(Math.random()*verses.length)];
+
+let opts=randomOptions(currentVerse.num);
+
+let html="";
+
+opts.forEach(o=>{
+
+html+=`<div class="option" onclick="checkAnswer(${o})">Ayat ${o}</div>`;
+
+});
+
+document.getElementById("options").innerHTML=html;
+
+}
+
+function playAudio(){
+
+let audio=new Audio(currentVerse.audio);
+
+audio.play();
+
+}
+
+function checkAnswer(ans){
+
+if(ans===currentVerse.num){
+
+score+=10;
+alert("✅ Benar +10");
+
+}else{
+
+score-=5;
+alert("❌ Salah -5\nJawaban benar: Ayat "+currentVerse.num);
+
+}
+
+document.getElementById("score").innerHTML="Skor: "+score;
+
+}
+
+</script>
+
+</body>
+</html>
